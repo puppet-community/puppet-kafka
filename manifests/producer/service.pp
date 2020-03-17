@@ -2,12 +2,12 @@
 # Copyright:: Copyright (c) 2013 OpenTable Inc
 # License::   MIT
 
-# == Class: kafka::producer::service
+# == Resource: kafka::producer::service
 #
-# This private class is meant to be called from `kafka::producer`.
+# This private resource is meant to be called from `kafka::producer`.
 # It manages the kafka-producer service
 #
-class kafka::producer::service(
+define kafka::producer::service(
   String $user                               = $kafka::producer::user,
   String $group                              = $kafka::producer::group,
   Stdlib::Absolutepath $config_dir           = $kafka::producer::config_dir,
@@ -24,6 +24,8 @@ class kafka::producer::service(
   String $jmx_opts                           = $kafka::producer::jmx_opts,
   String $log4j_opts                         = $kafka::producer::log4j_opts,
   Hash $service_config                       = $kafka::producer::service_config,
+  String $producer_properties_name           = $kafka::params::producer_properties_name,
+  String $consumer_properties_name           = $kafka::params::consumer_properties_name,
 ) {
 
   if $caller_module_name != $module_name {

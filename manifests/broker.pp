@@ -145,6 +145,7 @@ class kafka::broker (
   String $heap_opts                          = $kafka::params::broker_heap_opts,
   String $jmx_opts                           = $kafka::params::broker_jmx_opts,
   String $log4j_opts                         = $kafka::params::broker_log4j_opts,
+  String $systemd_files_path                 = $kafka::params::systemd_files_path,
   $opts                                      = $kafka::params::broker_opts,
 ) inherits kafka::params {
 

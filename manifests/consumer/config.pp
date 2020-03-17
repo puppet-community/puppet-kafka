@@ -2,12 +2,13 @@
 # Copyright:: Copyright (c) 2013 OpenTable Inc
 # License::   MIT
 
-# == Class: kafka::consumer::config
+# == Resource: kafka::consumer::config
 #
-# This private class is meant to be called from `kafka::consumer`.
+# This private resource is meant to be called from `kafka::consumer`.
 # It manages the consumer config files
 #
-class kafka::consumer::config(
+define kafka::consumer::config(
+  String $consumer_properties_name = $kafka::params::consumer_properties_name,
   Stdlib::Absolutepath $config_dir = $kafka::consumer::config_dir,
   String $service_name             = $kafka::consumer::service_name,
   Boolean $service_install         = $kafka::consumer::service_install,
@@ -24,7 +25,7 @@ class kafka::consumer::config(
   }
 
   $doctag = 'consumerconfigs'
-  file { "${config_dir}/consumer.properties":
+  file { "${config_dir}/${consumer_properties_name}.properties":
     ensure  => present,
     owner   => 'root',
     group   => $group,

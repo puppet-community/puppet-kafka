@@ -2,12 +2,13 @@
 # Copyright:: Copyright (c) 2013 OpenTable Inc
 # License::   MIT
 
-# == Class: kafka::producer::config
+# == Resource: kafka::producer::config
 #
-# This private class is meant to be called from `kafka::producer`.
+# This private resource is meant to be called from `kafka::producer`.
 # It manages the producer config files
 #
-class kafka::producer::config(
+define kafka::producer::config(
+  String $producer_properties_name = $kafka::params::producer_properties_name,
   Stdlib::Absolutepath $config_dir = $kafka::producer::config_dir,
   String $service_name             = $kafka::producer::service_name,
   Boolean $service_install         = $kafka::producer::service_install,
@@ -24,7 +25,7 @@ class kafka::producer::config(
   }
 
   $doctag = 'producerconfigs'
-  file { "${config_dir}/producer.properties":
+  file { "${config_dir}/${producer_properties_name}.properties":
     ensure  => present,
     owner   => 'root',
     group   => $group,

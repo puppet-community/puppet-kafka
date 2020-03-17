@@ -5,6 +5,7 @@
 # == Class: kafka::mirror
 #
 # This class will install kafka with the mirror role.
+# If you need to have multiple mirror services, you should use `kafka::mirror::rmirror` resources multiple time instead (with the same args definition).
 #
 # === Requirements/Dependencies
 #
@@ -105,7 +106,7 @@
 #  consumer_config => { 'client.id' => '0', 'zookeeper.connect' => 'localhost:2181' }
 # }
 #
-class kafka::mirror (
+define kafka::mirror (
   String $version                            = $kafka::params::version,
   String $scala_version                      = $kafka::params::scala_version,
   Stdlib::Absolutepath $install_dir          = $kafka::params::install_dir,
@@ -124,24 +125,53 @@ class kafka::mirror (
   Stdlib::Absolutepath $config_dir           = $kafka::params::config_dir,
   Stdlib::Absolutepath $log_dir              = $kafka::params::log_dir,
   Stdlib::Absolutepath $bin_dir              = $kafka::params::bin_dir,
-  String $service_name                       = 'kafka-mirror',
+  String $service_name                       = $kafka::params::mirror_service_name,
   Boolean $service_install                   = $kafka::params::service_install,
   Enum['running', 'stopped'] $service_ensure = $kafka::params::service_ensure,
   Boolean $service_restart                   = $kafka::params::service_restart,
   Array[String] $service_requires            = $kafka::params::service_requires,
   Optional[String] $limit_nofile             = $kafka::params::limit_nofile,
   Optional[String] $limit_core               = $kafka::params::limit_core,
-  Hash $env                                  = {},
-  Hash $consumer_config                      = {},
-  Hash $producer_config                      = {},
-  Hash $service_config                       = {},
+  Hash $env                                  = $kafka::params::env,
+  Hash $consumer_config                      = $kafka::params::consumer_config,
+  Hash $producer_config                      = $kafka::params::producer_config,
+  Hash $service_config                       = $kafka::params::service_config,
   String $heap_opts                          = $kafka::params::mirror_heap_opts,
   String $jmx_opts                           = $kafka::params::mirror_jmx_opts,
   String $log4j_opts                         = $kafka::params::mirror_log4j_opts,
-) inherits kafka::params {
+  String $systemd_files_path                 = $kafka::params::systemd_files_path,
+) {
+  ::kafka::mirror::install { $title: }
+  -> ::kafka::mirror::config { $title:
+    config_dir      => $config_dir,
+    service_name    => $service_name,
+    service_install => $service_install,
+    service_restart => $service_restart,
+    consumer_config => $consumer_config,
+    producer_config => $producer_config,
+    config_mode     => $config_mode,
+    group           => $group,
+  }
+  -> ::kafka::mirror::service { $title:
+    user               => $user,
+    group              => $group,
+    config_dir         => $config_dir,
+    log_dir            => $log_dir,
+    bin_dir            => $bin_dir,
+    service_name       => $service_name,
+    service_install    => $service_install,
+    service_ensure     => $service_ensure,
+    service_requires   => $service_requires,
+    limit_nofile       => $limit_nofile,
+    limit_core         => $limit_core,
+    env                => $env,
+    consumer_config    => $consumer_config,
+    producer_config    => $producer_config,
+    service_config     => $service_config,
+    heap_opts          => $heap_opts,
+    jmx_opts           => $jmx_opts,
+    log4j_opts         => $log4j_opts,
+    systemd_files_path => $systemd_files_path,
+  }
 
-  class { '::kafka::mirror::install': }
-  -> class { '::kafka::mirror::config': }
-  -> class { '::kafka::mirror::service': }
-  -> Class['kafka::mirror']
 }

@@ -212,7 +212,15 @@ Whether the configuration files should trigger a service restart
 
 The directory to install kafka.
 
-#### Class: `kafka::consumer`
+#### `limit_nofile`
+
+The `LimitNOFILE` systemd paramater value
+
+#### `limit_core`
+
+The `LimitCORE` systemd parameter value
+
+#### Resource: `kafka::consumer`
 
 One of the primary classes of the kafka module. This class will install a kafka consumer.
 
@@ -242,9 +250,17 @@ Install java if it's not already installed.
 
 The directory to install kafka.
 
-#### Class: `kafka::mirror`
+#### `limit_nofile`
 
-One of the primary classes of the kafka module. This class will install a kafka mirror.
+The `LimitNOFILE` systemd paramater value
+
+#### `limit_core`
+
+The `LimitCORE` systemd parameter value
+
+#### Resource: `kafka::mirror`
+
+One of the primary resources of the kafka module. This resource will install a kafka mirror and can be called multiple time.
 
 **Parameters within `kafka::mirror`:**
 
@@ -272,9 +288,17 @@ Install java if it's not already installed.
 
 The directory to install kafka.
 
-#### Class: `kafka::producer`
+#### `limit_nofile`
 
-One of the primary classes of the kafka module. This class will install a kafka producer.
+The `LimitNOFILE` systemd paramater value
+
+#### `limit_core`
+
+The `LimitCORE` systemd parameter value
+
+#### Resource: `kafka::producer`
+
+One of the primary resources of the kafka module. This resource will install a kafka producer.
 
 **Parameters within `kafka::producer`:**
 
@@ -310,7 +334,7 @@ Defined type that creates Kafka topics.
 
 ### Classes
 
-#### Public Classes
+#### Public Classes and resources
 
 * `kafka`: Guides the basic installation of kafka binaries
 * `kafka::broker`: Guides the basic installation of a kafka broker
@@ -318,7 +342,7 @@ Defined type that creates Kafka topics.
 * `kafka::mirror`: Guides the basic installation of a kafka mirror
 * `kafka::producer`: Guides the basic installation of a kafka producer
 
-#### Private Classes
+#### Private Classes and resources
 
 * [`kafka::broker::config`]  Manages all the default configuration of the kafka broker application
 * [`kafka::broker::install`] Manages the installation of the kafka packages
@@ -345,6 +369,7 @@ This module is tested on the following platforms:
 
 * CentOS 5
 * CentOS 6
+* CentOS 7
 * Ubuntu 12.04
 * Ubuntu 14.04
 

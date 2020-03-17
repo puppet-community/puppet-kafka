@@ -55,22 +55,35 @@ class kafka::params {
   $daemon_start = false
 
   $broker_heap_opts  = '-Xmx1G -Xms1G'
-  $broker_jmx_opts   = '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false \
-  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=9990'
+  $broker_jmx_port   = 9990
+  $broker_jmx_opts   = "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false \
+  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=${broker_jmx_port}"
   $broker_log4j_opts = "-Dlog4j.configuration=file:${config_dir}/log4j.properties"
   $broker_opts       = ''
 
-  $mirror_heap_opts  = '-Xmx256M'
-  $mirror_jmx_opts   = '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false \
-  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=9991'
-  $mirror_log4j_opts = $broker_log4j_opts
+  $mirror_heap_opts    = '-Xmx256M'
+  $mirror_jmx_port     = 9991
+  $mirror_jmx_opts     = "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false \
+  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=${mirror_jmx_port}"
+  $mirror_log4j_opts   = $broker_log4j_opts
+  $mirror_service_name = 'kafka-mirror'
 
-  $producer_jmx_opts   = '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false \
-  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=9992'
+  $producer_jmx_port   = 9992
+  $producer_jmx_opts   = "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false \
+  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=${producer_jmx_port}"
   $producer_log4j_opts = $broker_log4j_opts
 
-  $consumer_jmx_opts   = '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false \
-  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=9993'
+  $consumer_jmx_port   = 9993
+  $consumer_jmx_opts   = "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false \
+  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=${consumer_jmx_port}"
   $consumer_log4j_opts = $broker_log4j_opts
 
+  $env                      = {}
+  $consumer_config          = {}
+  $producer_config          = {}
+  $service_config           = {}
+  $mirror_default_name      = 'default'
+  $producer_properties_name = 'producer'
+  $consumer_properties_name = 'consumer'
+  $systemd_files_path       = '/etc/systemd/system'
 }
