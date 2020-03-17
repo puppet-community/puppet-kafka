@@ -2,12 +2,12 @@
 # Copyright:: Copyright (c) 2013 OpenTable Inc
 # License::   MIT
 
-# == Class: kafka::consumer::service
+# == Resource: kafka::consumer::service
 #
-# This private class is meant to be called from `kafka::consumer`.
+# This private resource is meant to be called from `kafka::consumer`.
 # It manages the kafka-consumer service
 #
-class kafka::consumer::service(
+define kafka::consumer::service(
   String $user                               = $kafka::consumer::user,
   String $group                              = $kafka::consumer::group,
   Stdlib::Absolutepath $config_dir           = $kafka::consumer::config_dir,
@@ -23,6 +23,9 @@ class kafka::consumer::service(
   String $jmx_opts                           = $kafka::consumer::jmx_opts,
   String $log4j_opts                         = $kafka::consumer::log4j_opts,
   Hash $service_config                       = $kafka::consumer::service_config,
+  String $producer_properties_name           = $kafka::params::producer_properties_name,
+  String $consumer_properties_name           = $kafka::params::consumer_properties_name,
+  String $systemd_files_path                 = $kafka::params::systemd_files_path,
 ) {
 
   if $caller_module_name != $module_name {
@@ -47,7 +50,13 @@ class kafka::consumer::service(
     if $::service_provider == 'systemd' {
       include ::systemd
 
-      file { "/etc/systemd/system/${service_name}.service":
+      if $systemd_files_path != $kafka::params::systemd_files_path {
+        file { "${kafka::params::systemd_files_path}/${service_name}.service":
+          ensure  => absent,
+        }
+      }
+
+      file { "${systemd_files_path}/${service_name}.service":
         ensure  => file,
         mode    => '0644',
         content => template('kafka/unit.erb'),
@@ -57,7 +66,7 @@ class kafka::consumer::service(
         ensure => absent,
       }
 
-      File["/etc/systemd/system/${service_name}.service"]
+      File["${systemd_files_path}/${service_name}.service"]
       ~> Exec['systemctl-daemon-reload']
       -> Service[$service_name]
 
@@ -66,7 +75,6 @@ class kafka::consumer::service(
         ensure  => file,
         mode    => '0755',
         content => template('kafka/init.erb'),
-        before  => Service[$service_name],
       }
     }
 

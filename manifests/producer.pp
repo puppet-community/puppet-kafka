@@ -2,9 +2,9 @@
 # Copyright:: Copyright (c) 2013 OpenTable Inc
 # License::   MIT
 
-# == Class: kafka::producer
+# == Resource: kafka::producer
 #
-# This class will install kafka with the producer role.
+# This resource will install kafka with the producer role.
 #
 # === Requirements/Dependencies
 #
@@ -105,7 +105,7 @@
 #  config => { 'client.id' => '0', 'zookeeper.connect' => 'localhost:2181' }
 # }
 #
-class kafka::producer (
+define kafka::producer (
   $input,
   String $version                            = $kafka::params::version,
   String $scala_version                      = $kafka::params::scala_version,
@@ -132,15 +132,16 @@ class kafka::producer (
   Array[String] $service_requires            = $kafka::params::service_requires,
   Optional[String] $limit_nofile             = $kafka::params::limit_nofile,
   Optional[String] $limit_core               = $kafka::params::limit_core,
-  Hash $env                                  = {},
-  Hash $config                               = {},
-  Hash $service_config                       = {},
+  Hash $env                                  = $kafka::params::env,
+  Hash $config                               = $kafka::params::producer_config,
+  Hash $service_config                       = $kafka::params::service_config,
   String $jmx_opts                           = $kafka::params::producer_jmx_opts,
   String $log4j_opts                         = $kafka::params::producer_log4j_opts,
-) inherits kafka::params {
+  String $producer_properties_name           = $kafka::params::producer_properties_name,
+  String $systemd_files_path                 = $kafka::params::systemd_files_path,
+) {
 
-  class { '::kafka::producer::install': }
-  -> class { '::kafka::producer::config': }
-  -> class { '::kafka::producer::service': }
-  -> Class['kafka::producer']
+  ::kafka::producer::install    { "${producer_properties_name}-${title}": }
+  -> ::kafka::producer::config  { "${producer_properties_name}-${title}": }
+  -> ::kafka::producer::service { "${producer_properties_name}-${title}": }
 }

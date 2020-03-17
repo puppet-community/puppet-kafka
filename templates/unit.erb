@@ -29,7 +29,7 @@ Type=simple
 ExecStart=<%= @bin_dir %>/kafka-console-consumer.sh <% @service_config.sort.each do |k,v| -%><% unless v.to_s.strip.empty? -%>--<%= k -%> '<%= v.is_a?(Array) ? v.join(',') : v %>' <% end -%><% end %>
 <%- when 'kafka-mirror' -%>
 Type=simple
-ExecStart=<%= @bin_dir %>/kafka-run-class.sh kafka.tools.MirrorMaker --consumer.config <%= @config_dir %>/consumer.properties --producer.config <%= @config_dir %>/producer.properties <% @service_config.sort.each do |k,v| -%><% unless v.to_s.strip.empty? -%>--<%= k -%> '<%= v.is_a?(Array) ? v.join(',') : v %>' <% end -%><% end %>
+ExecStart=<%= @bin_dir %>/kafka-run-class.sh kafka.tools.MirrorMaker --consumer.config <%= @config_dir %>/<%= @consumer_properties_name %>.properties --producer.config <%= @config_dir %>/<%= @producer_properties_name %>.properties <% @service_config.sort.each do |k,v| -%><% unless v.to_s.strip.empty? -%>--<%= k -%> '<%= v.is_a?(Array) ? v.join(',') : v %>' <% end -%><% end %>
 <%- when 'kafka-producer' -%>
 Type=simple
 ExecStart=<%= @bin_dir %>/kafka-console-producer.sh <% @service_config.sort.each do |k,v| -%><% unless v.to_s.strip.empty? -%>--<%= k -%> '<%= v.is_a?(Array) ? v.join(',') : v %>' <% end -%><% end -%> <%= @input %>

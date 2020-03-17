@@ -92,6 +92,9 @@ class kafka (
   Optional[Integer] $group_id       = $kafka::params::group_id,
   Boolean $manage_user              = $kafka::params::manage_user,
   Boolean $manage_group             = $kafka::params::manage_group,
+  String  $kafka_dir                = $kafka::params::kafka_dir,
+  String  $kafka_log_dir            = $kafka::params::kafka_log_dir,
+  String  $zookeeper_hosts          = $kafka::params::zookeeper_hosts,
   Stdlib::Absolutepath $config_dir  = $kafka::params::config_dir,
   Stdlib::Absolutepath $log_dir     = $kafka::params::log_dir,
   Optional[String] $install_mode    = $kafka::params::install_mode,
@@ -136,6 +139,19 @@ class kafka (
       User[$user],
     ],
   }
+
+  file { "${kafka_dir}/compareTopicConfig.sh":
+    mode   => '0755',
+    owner  => $user ,
+    group  => $group ,
+    content => template('kafka/compareTopicConfig.sh.erb'),
+  } ->
+  exec { "create config topic result file":
+    path    => "/usr/bin:/usr/sbin/:/bin:/sbin:${bin_dir}",
+    command => "kafka-topics.sh --zookeeper ${zookeeper_hosts} --topics-with-overrides --describe > ${kafka_log_dir}/resultsTopicsConfig.txt ",
+    unless  => "${kafka_dir}/compareTopicConfig.sh",
+  }
+
 
   if $package_name == undef {
 

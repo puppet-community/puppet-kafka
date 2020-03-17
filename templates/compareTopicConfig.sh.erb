@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+str=$(/opt/kafka/bin/kafka-topics.sh --zookeeper <%= @zookeeper_hosts %> --topics-with-overrides --describe)
+
+file="<%= @kafka_log_dir %>/resultsTopicsConfig.txt"
+
+[[ ! -f $file ]] && touch $file
+
+content=$(cat <%= @kafka_log_dir %>/resultsTopicsConfig.txt)
+
+
+if [[ $str != $content ]]; then
+   exit -1
+fi
