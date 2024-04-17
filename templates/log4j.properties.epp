@@ -27,42 +27,42 @@ log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=[%d] %p %m (%c)%n
 
 log4j.appender.kafkaAppender=org.apache.log4j.RollingFileAppender
-log4j.appender.kafkaAppender.File=${kafka.logs.dir}/server.log
+log4j.appender.kafkaAppender.File=<%= $log_dir %>/server.log
 log4j.appender.kafkaAppender.layout=org.apache.log4j.PatternLayout
 log4j.appender.kafkaAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
 log4j.appender.kafkaAppender.MaxFileSize=<%= $log_file_size %>
 log4j.appender.kafkaAppender.MaxBackupIndex=<%= $log_file_count %>
 
 log4j.appender.stateChangeAppender=org.apache.log4j.RollingFileAppender
-log4j.appender.stateChangeAppender.File=${kafka.logs.dir}/state-change.log
+log4j.appender.stateChangeAppender.File=<%= $log_dir %>/state-change.log
 log4j.appender.stateChangeAppender.layout=org.apache.log4j.PatternLayout
 log4j.appender.stateChangeAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
 log4j.appender.stateChangeAppender.MaxFileSize=<%= $log_file_size %>
 log4j.appender.stateChangeAppender.MaxBackupIndex=<%= $log_file_count %>
 
 log4j.appender.requestAppender=org.apache.log4j.RollingFileAppender
-log4j.appender.requestAppender.File=${kafka.logs.dir}/kafka-request.log
+log4j.appender.requestAppender.File=<%= $log_dir %>/kafka-request.log
 log4j.appender.requestAppender.layout=org.apache.log4j.PatternLayout
 log4j.appender.requestAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
 log4j.appender.requestAppender.MaxFileSize=<%= $log_file_size %>
 log4j.appender.requestAppender.MaxBackupIndex=<%= $log_file_count %>
 
 log4j.appender.cleanerAppender=org.apache.log4j.RollingFileAppender
-log4j.appender.cleanerAppender.File=${kafka.logs.dir}/log-cleaner.log
+log4j.appender.cleanerAppender.File=<%= $log_dir %>/log-cleaner.log
 log4j.appender.cleanerAppender.layout=org.apache.log4j.PatternLayout
 log4j.appender.cleanerAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
 log4j.appender.cleanerAppender.MaxFileSize=<%= $log_file_size %>
 log4j.appender.cleanerAppender.MaxBackupIndex=<%= $log_file_count %>
 
 log4j.appender.controllerAppender=org.apache.log4j.RollingFileAppender
-log4j.appender.controllerAppender.File=${kafka.logs.dir}/controller.log
+log4j.appender.controllerAppender.File=<%= $log_dir %>/controller.log
 log4j.appender.controllerAppender.layout=org.apache.log4j.PatternLayout
 log4j.appender.controllerAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
 log4j.appender.controllerAppender.MaxFileSize=<%= $log_file_size %>
 log4j.appender.controllerAppender.MaxBackupIndex=<%= $log_file_count %>
 
 log4j.appender.authorizerAppender=org.apache.log4j.RollingFileAppender
-log4j.appender.authorizerAppender.File=${kafka.logs.dir}/kafka-authorizer.log
+log4j.appender.authorizerAppender.File=<%= $log_dir %>/kafka-authorizer.log
 log4j.appender.authorizerAppender.layout=org.apache.log4j.PatternLayout
 log4j.appender.authorizerAppender.layout.ConversionPattern=[%d] %p %m (%c)%n
 log4j.appender.authorizerAppender.MaxFileSize=<%= $log_file_size %>

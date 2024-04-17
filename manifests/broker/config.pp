@@ -15,6 +15,7 @@ class kafka::broker::config (
   Boolean $manage_log4j                         = $kafka::broker::manage_log4j,
   Pattern[/[1-9][0-9]*[KMG]B/] $log_file_size   = $kafka::broker::log_file_size,
   Integer[1, 50] $log_file_count                = $kafka::broker::log_file_count,
+  Stdlib::Absolutepath $log_dir                 = $kafka::broker::log_dir,
 ) {
   assert_private()
 
@@ -41,7 +42,7 @@ class kafka::broker::config (
       owner   => $user_name,
       group   => $group_name,
       mode    => $config_mode,
-      content => epp('kafka/log4j.properties.epp', { 'log_file_size' => $log_file_size, 'log_file_count' => $log_file_count }),
+      content => epp('kafka/log4j.properties.epp', { 'log_file_size' => $log_file_size, 'log_file_count' => $log_file_count, 'log_dir' => $log_dir }),
       notify  => $config_notify,
       require => File[$config_dir],
     }
