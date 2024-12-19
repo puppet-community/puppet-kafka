@@ -78,6 +78,25 @@ describe 'kafka::topic', type: :define do
           )
         }
       end
+
+      context 'when create topic demo for kafka v3 and command-config' do
+        let(:title) { 'demo' }
+        let :params do
+          {
+            'ensure'             => 'present',
+            'bootstrap_server'   => 'localhost:9092',
+            'replication_factor' => 1,
+            'partitions'         => 1,
+            'cmd_config'         => '/opt/kafka/config/admin.config',
+          }
+        end
+
+        it {
+          is_expected.to contain_exec('create topic demo').with(
+            command: 'kafka-topics.sh --create --bootstrap-server localhost:9092 --command-config /opt/kafka/config/admin.config --replication-factor 1 --partitions 1 --topic demo '
+          )
+        }
+      end
     end
   end
 end

@@ -34,6 +34,11 @@
 #   A topic configuration override for the topic being created or altered.
 #   See the Kafka documentation for full details on the topic configs.
 #
+# @param cmd_config
+#   Property file containing configs to be passed to Admin Client.
+#   This is used only with --bootstrap-server option for describing and
+#   altering broker configs (e.g. specify sasl and ssl configs)
+#
 define kafka::topic (
   Optional[String[1]] $ensure                 = undef,
   Optional[String[1]] $zookeeper              = undef,
@@ -42,6 +47,7 @@ define kafka::topic (
   Integer   $partitions                       = 1,
   String[1] $bin_dir                          = '/opt/kafka/bin',
   Optional[Hash[String[1],String[1]]] $config = undef,
+  Optional[Stdlib::Absolutepath] $cmd_config  = undef,
 ) {
   $_zookeeper          = "--zookeeper ${zookeeper}"
   $_bootstrap_server   = "--bootstrap-server ${bootstrap_server}"
@@ -52,10 +58,18 @@ define kafka::topic (
     fail('Either zookeeper or bootstrap_server parameter must be defined!')
   }
 
+  if $zookeeper and $cmd_config {
+    warn('cmd_config will be ignored: This is used only with bootstrap_server')
+  }
+
   if $zookeeper {
     $_connection = $_zookeeper
   } else {
-    $_connection = $_bootstrap_server
+    if $cmd_config {
+      $_connection = "${_bootstrap_server} --command-config ${cmd_config}"
+    } else {
+      $_connection = $_bootstrap_server
+    }
   }
 
   if $config {

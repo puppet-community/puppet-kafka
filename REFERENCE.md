@@ -1648,7 +1648,7 @@ Default value: `$kafka::params::producer_log4j_opts`
 
 ### <a name="kafka--topic"></a>`kafka::topic`
 
-This defined type handles the creation of Kafka topics.
+   altering broker configs (e.g. specify sasl and ssl configs)
 
 #### Examples
 
@@ -1674,6 +1674,7 @@ The following parameters are available in the `kafka::topic` defined type:
 * [`partitions`](#-kafka--topic--partitions)
 * [`bin_dir`](#-kafka--topic--bin_dir)
 * [`config`](#-kafka--topic--config)
+* [`cmd_config`](#-kafka--topic--cmd_config)
 
 ##### <a name="-kafka--topic--ensure"></a>`ensure`
 
@@ -1732,6 +1733,15 @@ Data type: `Optional[Hash[String[1],String[1]]]`
 
 A topic configuration override for the topic being created or altered.
 See the Kafka documentation for full details on the topic configs.
+
+Default value: `undef`
+
+##### <a name="-kafka--topic--cmd_config"></a>`cmd_config`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Property file containing configs to be passed to Admin Client.
+This is used only with --bootstrap-server option for describing and
 
 Default value: `undef`
 
